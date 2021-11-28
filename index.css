@@ -1,7 +1,4 @@
-html,
-body {
-    background:#fafafa;
-}
+@import "default.css";
 
 .content {
     display: block;
