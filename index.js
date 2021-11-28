@@ -37,7 +37,7 @@ function createCard() {
   if (currentDataIndex >= data.length) {
     clearInterval(createCardAction);
   } else {
-    console.log("Create card...");
+    
     var parent = document.querySelector(".content");
 
     const element = data[currentDataIndex];
