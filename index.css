@@ -1,19 +1,43 @@
 @import "default.css";
 
 .content {
-    display: block;
-    margin-left: 25%;
-    margin-right: 25%;
+  display: block;
+  margin-left: 15%;
+  margin-right: 15%;
 }
 
 .card {
-    display: block;
-    background:#ffffff;
-    border-radius: 10px;
-    margin: 5%;
-    padding: 25px;
-    padding-top: 50px;
-    padding-bottom: 50px;
-    box-sizing: border-box;
-    box-shadow: 0 20px 20px -10px rgba(0,0,0,0.1);
+  display: block;
+  background: #ffffff;
+  border-radius: 10px;
+  margin: 5%;
+  padding: 25px;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  box-sizing: border-box;
+  box-shadow: 0 20px 20px -10px rgba(0, 0, 0, 0.1);
+}
+
+/* mobile */
+@media only screen and (max-width: 320px) {
+  .content {
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+  }
+}
+
+/* tablet */
+@media only screen and (max-width: 768px) {
+  .content {
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+}
+
+/* laptop */
+@media only screen and (max-width: 1200px) {
+  .content {
+    margin-left: 10%;
+    margin-right: 10%;
+  }
 }
