@@ -11,7 +11,7 @@ function queryData() {
   console.log("Start fetching...");
 
   var query;
-  query = db.collection("feedback");
+  query = db.collection("feedback").orderBy("timestamp", "desc");
 
   // Temp
   // if (data == null) {
@@ -44,8 +44,8 @@ function createCard() {
     // Create a card
     var card = document.createElement("div");
     card.className = "card animate__animated animate__fadeInDown";
-    
-    card.appendChild(document.createTextNode(`#${currentDataIndex + 1}`));
+
+    card.appendChild(document.createTextNode(`#${data.length - currentDataIndex}`));
     card.appendChild(document.createElement("br"));
     card.appendChild(document.createElement("br"));
     card.appendChild(document.createTextNode(`comment: ${element["comment"]}`));
@@ -55,9 +55,25 @@ function createCard() {
     card.appendChild(document.createElement("br"));
     card.appendChild(document.createElement("br"));
     card.appendChild(document.createTextNode(`rating: ${element["rating"]}`));
+    card.appendChild(document.createElement("br"));
+    card.appendChild(document.createElement("br"));
+    var timestamp = element["timestamp"].toString();
+    var formattedTime =
+    timestamp.substring(0, 4) +
+      "/" +
+      timestamp.substring(4, 6) +
+      "/" +
+      timestamp.substring(6, 8) +
+      " " +
+      timestamp.substring(8, 10) +
+      ":" +
+      timestamp.substring(10, 12) +
+      ":" +
+      timestamp.substring(12, 14);
+    card.appendChild(document.createTextNode(`timestamp: ${formattedTime}`));
 
     // Put the card into parent at start
-    parent.prepend(card);
+    parent.append(card);
     console.log(element);
 
     currentDataIndex++;
