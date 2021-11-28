@@ -1,16 +1,25 @@
 var data;
 var currentDataIndex = 0;
 var createCardAction;
+const maxCardPerPage = 100;
 
 function init() {
-  fetchData();
-
-  // setInterval(fetchData, 5000);
+  queryData();
 }
 
-function fetchData() {
+function queryData() {
   console.log("Start fetching...");
-  db.collection("feedback")
+
+  var query;
+
+  if (data == null) {
+    query = db.collection("feedback");
+  } else {
+    query = db.collection("feedback").startAfter(data);
+  }
+
+  query
+    .limit(maxCardPerPage + 1)
     .get()
     .then((querySnapshot) => {
       data = querySnapshot.docs.map((doc) => Object.assign(doc.data(), { id: doc.id }));
@@ -38,7 +47,7 @@ function createCard() {
     card.textContent += `rating: ${element["rating"]}`;
 
     // Put the card into parent at start
-    parent.prepend(card);
+    parent.append(card);
     console.log(element);
 
     currentDataIndex++;

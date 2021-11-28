@@ -1,7 +1,22 @@
+html,
+body {
+    background:#fafafa;
+}
+
+.content {
+    display: block;
+    margin-left: 25%;
+    margin-right: 25%;
+}
+
 .card {
     display: block;
-    border: 2px solid black;
+    background:#ffffff;
     border-radius: 10px;
-    margin: 10px;
-    padding: 10px;
+    margin: 25px;
+    padding: 25px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    box-sizing: border-box;
+    box-shadow: 0 20px 20px -10px rgba(0,0,0,0.1);
 }
