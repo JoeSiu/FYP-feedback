@@ -1,12 +1,21 @@
 @import "reset.css";
 
 @font-face {
-  font-family: outfit;
-  src: url(assets/Outfit-VariableFont_wght.ttf);
+  font-family: "Open Sans", sans-serif;
+  src: url("https://fonts.googleapis.com/css?family=Open+Sans");
 }
 
 html,
 body {
-  font-family: outfit;
-  background: #fafafa;
+  font-family: "Open Sans", sans-serif;
+  background: #dedede;
+}
+
+h1 {
+  font-weight: bold;
+  font-size: larger;
+}
+
+strong {
+  font-weight: bold;
 }

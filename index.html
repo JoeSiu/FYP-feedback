@@ -4,8 +4,8 @@
     <meta charset="utf-8" />
     <meta name="author" content="Siu Man Ho" />
     <meta name="description" content="Botpuplation feedback site" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title>FYP Feedback</title>
 
     <!-- css -->
@@ -13,12 +13,36 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   </head>
   <body>
-     <!-- header -->
-     <div class="header">
-     </div>
+    <!-- header -->
+    <div class="header">
+      <h1 class="header-title"><a href="#top">Botpuplation Feedback</a></h1>
+    </div>
 
     <!-- content -->
-    <div class="content"></div>
+    <div class="content">
+      <!-- card template -->
+      <template>
+        <div class="card animate__animated animate__fadeInDown">
+          <img class="card-image" src="assets/no-image.jpg" alt="screenshot" />
+          <div class="card-content">
+            <div class="card-top">
+              <div class="card-type"><strong>Type</strong></div>
+              <div class="card-timestamp"><strong>yyyy/mm/dd hh:mm:ss</strong></div>
+            </div>
+            <div class="card-bottom">
+              <div class="card-comment">
+              Comment
+              </div>
+              <div class="card-rating">★★★☆☆</div>
+            </div>
+            <div class="card-link"><a href="#top">read more...</a></div>
+          </div>
+        </div>
+      </template>
+    </div>
+
+    <!-- loading icon -->
+    <div class="loader"><div></div><div></div><div></div><div></div></div>
 
     <!-- scripts -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>

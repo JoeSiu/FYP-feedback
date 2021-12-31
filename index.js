@@ -1,83 +1,127 @@
+const maxCardPerPage = 5;
+
 var data;
+var nextQuery;
 var currentDataIndex = 0;
+var currentPage = 0;
 var createCardAction;
-const maxCardPerPage = 100;
 
 function init() {
   queryData();
 }
 
 function queryData() {
-  console.log("Start fetching...");
+  console.log(`Start fetching page ${currentPage}...`);
 
-  var query;
-  query = db.collection("feedback").orderBy("timestamp", "desc");
+  // Query options
+  if (!nextQuery) {
+    nextQuery = db.collection("feedback").orderBy("timestamp", "desc").limit(maxCardPerPage);
+  }
 
-  // Temp
-  // if (data == null) {
-  //   query = db.collection("feedback");
-  // } else {
-  //   query = db.collection("feedback").startAfter(data);
-  // }
+  // Get query
+  nextQuery.get().then((querySnapshot) => {
+    data = querySnapshot.docs.map((doc) => Object.assign(doc.data(), { id: doc.id }));
+  
+    // Construct next query
+    var lastDataID = querySnapshot.docs[querySnapshot.docs.length - 1];
+    try {
+      nextQuery = db.collection("feedback").orderBy("timestamp", "desc").startAfter(lastDataID).limit(maxCardPerPage);
+    } catch (error) {
+      // End of data
+      console.log("End of data");
+      document.querySelector(".loader").style.display = "none";
+      document.removeEventListener("scroll", lazyLoad);
+    }
 
-  query
-    .limit(maxCardPerPage + 1)
-    .get()
-    .then((querySnapshot) => {
-      data = querySnapshot.docs.map((doc) => Object.assign(doc.data(), { id: doc.id }));
-      // data = data.reverse();
-      if (currentDataIndex != data.length) {
-        createCardAction = setInterval(createCard, 100);
-      }
-    });
+    createCardAction = setInterval(createCard, 100);
+    currentPage++;
+  });
 }
 
-// Temp
 function createCard() {
   if (currentDataIndex >= data.length) {
     clearInterval(createCardAction);
+    currentDataIndex = 0;
   } else {
-    
-    var parent = document.querySelector(".content");
-
     const element = data[currentDataIndex];
-    // Create a card
-    var card = document.createElement("div");
-    card.className = "card animate__animated animate__fadeInDown";
 
-    card.appendChild(document.createTextNode(`#${data.length - currentDataIndex}`));
-    card.appendChild(document.createElement("br"));
-    card.appendChild(document.createElement("br"));
-    card.appendChild(document.createTextNode(`comment: ${element["comment"]}`));
-    card.appendChild(document.createElement("br"));
-    card.appendChild(document.createElement("br"));
-    card.appendChild(document.createTextNode(`type: ${element["type"]}`));
-    card.appendChild(document.createElement("br"));
-    card.appendChild(document.createElement("br"));
-    card.appendChild(document.createTextNode(`rating: ${element["rating"]}`));
-    card.appendChild(document.createElement("br"));
-    card.appendChild(document.createElement("br"));
-    var timestamp = element["timestamp"].toString();
-    var formattedTime =
-    timestamp.substring(0, 4) +
-      "/" +
-      timestamp.substring(4, 6) +
-      "/" +
-      timestamp.substring(6, 8) +
-      " " +
-      timestamp.substring(8, 10) +
-      ":" +
-      timestamp.substring(10, 12) +
-      ":" +
-      timestamp.substring(12, 14);
-    card.appendChild(document.createTextNode(`timestamp: ${formattedTime}`));
+    // Create a card
+    var cardTemplate = document.getElementsByTagName("template")[0];
+    var card = cardTemplate.content.cloneNode(true);
+
+    var type = card.querySelector(".card-type strong");
+    type.innerHTML = element["type"];
+
+    var timestamp = card.querySelector(".card-timestamp strong");
+    timestamp.innerHTML = formatTimestamp(element["timestamp"].toString());
+
+    var comment = card.querySelector(".card-comment");
+    comment.innerHTML = element["comment"];
+
+    var rating = card.querySelector(".card-rating");
+    rating.innerHTML = formatRating(element["rating"]);
 
     // Put the card into parent at start
+    var parent = document.querySelector(".content");
     parent.append(card);
-    console.log(element);
+
+    console.log("loaded feedback #" + (maxCardPerPage * (currentPage - 1) + currentDataIndex));
 
     currentDataIndex++;
   }
 }
 
+function formatTimestamp(timestamp) {
+  return (
+    timestamp.substring(0, 4) +
+    "/" +
+    timestamp.substring(4, 6) +
+    "/" +
+    timestamp.substring(6, 8) +
+    " " +
+    timestamp.substring(8, 10) +
+    ":" +
+    timestamp.substring(10, 12) +
+    ":" +
+    timestamp.substring(12, 14)
+  );
+}
+
+function formatRating(rating) {
+  switch (rating) {
+    case 1:
+      return "★☆☆☆☆";
+    case 2:
+      return "★★☆☆☆";
+    case 3:
+      return "★★★☆☆";
+    case 4:
+      return "★★★★☆";
+    case 5:
+      return "★★★★★";
+    default:
+      return "☆☆☆☆☆";
+  }
+}
+
 window.onload = init();
+
+function lazyLoad() {
+  function getDocHeight() {
+    return Math.max(
+      document.body.scrollHeight,
+      document.documentElement.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.offsetHeight,
+      document.body.clientHeight,
+      document.documentElement.clientHeight
+    );
+  }
+
+  if (getDocHeight() <= window.pageYOffset + window.innerHeight) {
+    queryData();
+  }
+}
+
+
+document.addEventListener("scroll", lazyLoad);
