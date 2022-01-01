@@ -31,6 +31,17 @@
   margin-right: 15%;
 }
 
+.end {
+  display: none;
+  text-align: center;
+  margin-bottom: 5vh;
+}
+
+.end a {
+  color: gray;
+  text-decoration: none;
+}
+
 .card {
   display: flex;
   flex-direction: row;

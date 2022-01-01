@@ -30,16 +30,21 @@ function queryData() {
     try {
       nextQuery = db.collection("feedback").orderBy("timestamp", "desc").startAfter(lastDataID).limit(maxCardPerPage);
     } catch (error) {
-      // End of data
-      console.log("End of data");
-      document.querySelector(".loader").style.display = "none";
-      document.removeEventListener("scroll", lazyLoad);
+      setEnd();
     }
 
     createCardAction = setInterval(createCard, 100);
     currentPage++;
     loading = false;
   });
+}
+
+// End of data
+function setEnd() {
+ console.log("End of data");
+ document.querySelector(".loader").style.display = "none";
+ document.querySelector(".end").style.display = "block";
+ document.removeEventListener("scroll", lazyLoad);
 }
 
 function createCard() {
