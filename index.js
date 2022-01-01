@@ -128,11 +128,6 @@ function lazyLoad() {
   }
 
   var offset = 10;
-  console.log(
-    `scrolling, getDocHeight() = ${getDocHeight()}, window.pageYOffset + window.innerHeight + offset = ${
-      window.pageYOffset + window.innerHeight + offset
-    }`
-  );
   if (getDocHeight() <= window.pageYOffset + window.innerHeight + offset) {
     if (!loading) {
       queryData();
