@@ -2,6 +2,7 @@ const maxCardPerPage = 5;
 
 var data;
 var nextQuery;
+var loading = false;
 var currentDataIndex = 0;
 var currentPage = 0;
 var createCardAction;
@@ -13,6 +14,8 @@ function init() {
 function queryData() {
   console.log(`Start fetching page ${currentPage}...`);
 
+  loading = true;
+
   // Query options
   if (!nextQuery) {
     nextQuery = db.collection("feedback").orderBy("timestamp", "desc").limit(maxCardPerPage);
@@ -21,7 +24,7 @@ function queryData() {
   // Get query
   nextQuery.get().then((querySnapshot) => {
     data = querySnapshot.docs.map((doc) => Object.assign(doc.data(), { id: doc.id }));
-  
+
     // Construct next query
     var lastDataID = querySnapshot.docs[querySnapshot.docs.length - 1];
     try {
@@ -35,6 +38,7 @@ function queryData() {
 
     createCardAction = setInterval(createCard, 100);
     currentPage++;
+    loading = false;
   });
 }
 
@@ -118,10 +122,17 @@ function lazyLoad() {
     );
   }
 
-  if (getDocHeight() <= window.pageYOffset + window.innerHeight) {
-    queryData();
+  var offset = 10;
+  console.log(
+    `scrolling, getDocHeight() = ${getDocHeight()}, window.pageYOffset + window.innerHeight + offset = ${
+      window.pageYOffset + window.innerHeight + offset
+    }`
+  );
+  if (getDocHeight() <= window.pageYOffset + window.innerHeight + offset) {
+    if (!loading) {
+      queryData();
+    }
   }
 }
-
 
 document.addEventListener("scroll", lazyLoad);
