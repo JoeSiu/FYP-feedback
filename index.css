@@ -88,9 +88,11 @@
 .card-comment {
   float: left;
   width: 85%;
+  /* Text limit */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
   overflow: hidden;
-  text-overflow: ellipsis;
-  max-height: 3.6em;
   line-height: 1.2em;
 }
 
