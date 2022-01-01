@@ -15,6 +15,7 @@ function queryData() {
   console.log(`Start fetching page ${currentPage}...`);
 
   loading = true;
+  showloader(true);
 
   // Query options
   if (!nextQuery) {
@@ -25,6 +26,9 @@ function queryData() {
   nextQuery.get().then((querySnapshot) => {
     data = querySnapshot.docs.map((doc) => Object.assign(doc.data(), { id: doc.id }));
 
+    loading = false;
+    showloader(false);
+    
     // Construct next query
     var lastDataID = querySnapshot.docs[querySnapshot.docs.length - 1];
     try {
@@ -32,19 +36,26 @@ function queryData() {
     } catch (error) {
       setEnd();
     }
-
+    
     createCardAction = setInterval(createCard, 100);
     currentPage++;
-    loading = false;
   });
 }
 
 // End of data
 function setEnd() {
- console.log("End of data");
- document.querySelector(".loader").style.display = "none";
- document.querySelector(".end").style.display = "block";
- document.removeEventListener("scroll", lazyLoad);
+  console.log("End of data");
+  document.querySelector(".loader").style.display = "none";
+  document.querySelector(".end").style.display = "block";
+  document.removeEventListener("scroll", lazyLoad);
+}
+
+function showloader(isShow) {
+  if (isShow) {
+    document.querySelector(".loader").style.visibility = "visible";
+  } else {
+    document.querySelector(".loader").style.visibility = "hidden";
+  }
 }
 
 function createCard() {
