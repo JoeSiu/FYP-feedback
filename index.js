@@ -28,7 +28,7 @@ function queryData() {
 
     loading = false;
     showloader(false);
-    
+
     // Construct next query
     var lastDataID = querySnapshot.docs[querySnapshot.docs.length - 1];
     try {
@@ -36,7 +36,7 @@ function queryData() {
     } catch (error) {
       setEnd();
     }
-    
+
     createCardAction = setInterval(createCard, 100);
     currentPage++;
   });
@@ -80,6 +80,15 @@ function createCard() {
 
     var rating = card.querySelector(".card-rating");
     rating.innerHTML = formatRating(element["rating"]);
+
+    var image = card.querySelector(".card-image");
+    storageRef
+      .child(`feedback/${element.id}`)
+      .getDownloadURL()
+      .then((url) => {
+        console.log("url = " + url);
+        image.src = url;
+      });
 
     // Put the card into parent at start
     var parent = document.querySelector(".content");
