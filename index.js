@@ -64,6 +64,7 @@ function createCard() {
     currentDataIndex = 0;
   } else {
     const element = data[currentDataIndex];
+    var cardIndex = (maxCardPerPage * (currentPage - 1) + currentDataIndex);
 
     // Create a card
     var cardTemplate = document.getElementsByTagName("template")[0];
@@ -86,15 +87,15 @@ function createCard() {
       .child(`feedback/${element.id}`)
       .getDownloadURL()
       .then((url) => {
-        console.log("url = " + url);
         image.src = url;
-      });
+      })
+      .catch(() => console.log(`No image available for feedback #${cardIndex} (${element.id})`));
 
     // Put the card into parent at start
     var parent = document.querySelector(".content");
     parent.append(card);
 
-    console.log("loaded feedback #" + (maxCardPerPage * (currentPage - 1) + currentDataIndex));
+    console.log(`loaded feedback #${cardIndex} (${element.id})`);
 
     currentDataIndex++;
   }
