@@ -1,0 +1,21 @@
+@import "default.css";
+@import "header.css";
+
+.main {
+  margin-top: 5%;
+  margin-bottom: 5%;
+  padding: 2.5%;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 10px;
+  margin: 5vh;
+  box-sizing: border-box;
+  box-shadow: 0 20px 20px -10px rgba(0, 0, 0, 0.1);
+  min-width: 250px;
+}
+
+.main img {
+  max-width: 50%;
+  max-height: 50%;
+}
