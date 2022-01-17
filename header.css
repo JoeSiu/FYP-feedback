@@ -21,13 +21,25 @@
     color: black;
     text-decoration: none;
   }
+
+  .header-title a:hover {
+    color: gray;
+  }
   
   .header-question {
     margin-left: auto;
     margin-right: 0;
   }
-  
+
   .header-question a {
     color: black;
     text-decoration: none;
+  }
+  
+  .header-question i {
+    color: black;
+  }
+
+  .header-question i:hover {
+    color: gray;
   }

@@ -19,3 +19,25 @@
   max-width: 50%;
   max-height: 50%;
 }
+
+/* mobile */
+@media only screen and (max-width: 320px) {
+}
+
+/* tablet */
+@media only screen and (max-width: 768px) {
+  .card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-image {
+    width: 100%;
+    border-radius: 10px 10px 0px 0px;
+  }
+}
+
+/* laptop */
+@media only screen and (max-width: 1200px) {
+ 
+}

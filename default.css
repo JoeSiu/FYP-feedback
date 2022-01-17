@@ -63,3 +63,21 @@ strong {
   margin-left: 15%;
   margin-right: 15%;
 }
+
+/* mobile */
+@media only screen and (max-width: 320px) {
+  
+}
+
+/* tablet */
+@media only screen and (max-width: 768px) {
+  .content {
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+}
+
+/* laptop */
+@media only screen and (max-width: 1200px) {
+ 
+}
