@@ -7,6 +7,8 @@ var currentDataIndex = 0;
 var currentPage = 0;
 var createCardAction;
 
+var isHideDevFeedback = false;
+
 function init() {
   queryData();
 }
@@ -25,10 +27,8 @@ function queryData() {
   // Get query
   nextQuery.get().then((querySnapshot) => {
     data = querySnapshot.docs.map((doc) => Object.assign(doc.data(), { id: doc.id }));
-
     loading = false;
     showloader(false);
-
     // Construct next query
     var lastDataID = querySnapshot.docs[querySnapshot.docs.length - 1];
     try {
@@ -64,38 +64,48 @@ function createCard() {
     currentDataIndex = 0;
   } else {
     const element = data[currentDataIndex];
-    var cardIndex = (maxCardPerPage * (currentPage - 1) + currentDataIndex);
+    var cardIndex = maxCardPerPage * (currentPage - 1) + currentDataIndex;
 
-    // Create a card
-    var cardTemplate = document.getElementsByTagName("template")[0];
-    var card = cardTemplate.content.cloneNode(true);
+    function create() {
+      // Create a card
+      var cardTemplate = document.getElementsByTagName("template")[0];
+      var card = cardTemplate.content.cloneNode(true);
 
-    var type = card.querySelector(".card-type strong");
-    type.innerHTML = element["type"];
+      var type = card.querySelector(".card-type strong");
+      type.innerHTML = element["type"];
 
-    var timestamp = card.querySelector(".card-timestamp strong");
-    timestamp.innerHTML = formatTimestamp(element["timestamp"].toString());
+      var timestamp = card.querySelector(".card-timestamp strong");
+      timestamp.innerHTML = formatTimestamp(element["timestamp"].toString());
 
-    var comment = card.querySelector(".card-comment");
-    comment.innerHTML = element["comment"];
+      var comment = card.querySelector(".card-comment");
+      comment.innerHTML = element["comment"];
 
-    var rating = card.querySelector(".card-rating");
-    rating.innerHTML = formatRating(element["rating"]);
+      var rating = card.querySelector(".card-rating");
+      rating.innerHTML = formatRating(element["rating"]);
 
-    var image = card.querySelector(".card-image");
-    storageRef
-      .child(`feedback/${element.id}`)
-      .getDownloadURL()
-      .then((url) => {
-        image.src = url;
-      })
-      .catch(() => console.log(`No image available for feedback #${cardIndex} (${element.id})`));
+      var image = card.querySelector(".card-image");
+      storageRef
+        .child(`feedback/${element.id}`)
+        .getDownloadURL()
+        .then((url) => {
+          image.src = url;
+        })
+        .catch(() => console.log(`No image available for feedback #${cardIndex} (${element.id})`));
 
-    // Put the card into parent at start
-    var parent = document.querySelector(".content");
-    parent.append(card);
+      // Put the card into parent at start
+      var parent = document.querySelector(".content");
+      parent.append(card);
 
-    console.log(`loaded feedback #${cardIndex} (${element.id})`);
+      console.log(`loaded feedback #${cardIndex} (ID: ${element.id}, User: ${element.userID})`);
+    }
+    
+    if (isHideDevFeedback) {
+      if (element.userID != "dev") {
+        create();
+      }
+    } else {
+      create();
+    }
 
     currentDataIndex++;
   }
@@ -134,6 +144,22 @@ function formatRating(rating) {
   }
 }
 
+function deleteAllCards() {
+  const elements = document.getElementsByClassName("card");
+  while (elements.length > 0) {
+    elements[0].parentNode.removeChild(elements[0]);
+  }
+}
+
+function refresh() {
+  console.log("Refreshing data...");
+  currentDataIndex = 0;
+  currentPage = 0;
+  nextQuery = null;
+  deleteAllCards();
+  queryData();
+}
+
 window.onload = init();
 
 function lazyLoad() {
@@ -156,4 +182,15 @@ function lazyLoad() {
   }
 }
 
+// Event listeners
 document.addEventListener("scroll", lazyLoad);
+
+document.getElementById("hide-dev-feedback-switch").addEventListener("change", (event) => {
+  if (event.currentTarget.checked) {
+    isHideDevFeedback = true;
+    refresh();
+  } else {
+    isHideDevFeedback = false;
+    refresh();
+  }
+});

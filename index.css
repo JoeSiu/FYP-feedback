@@ -1,6 +1,7 @@
 @import "default.css";
 @import "loader.css";
 @import "header.css";
+@import "switch.css";
 
 .end {
   display: none;

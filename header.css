@@ -36,10 +36,10 @@
     text-decoration: none;
   }
   
-  .header-question i {
+  .header-question em {
     color: black;
   }
 
-  .header-question i:hover {
+  .header-question em:hover {
     color: gray;
   }
