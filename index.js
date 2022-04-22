@@ -205,3 +205,7 @@ document.getElementById("hide-dev-feedback-switch").addEventListener("change", (
 document.getElementById("image-modal-close").onclick = function () {
   imageModal.style.display = "none";
 };
+
+document.getElementById("image-modal-background").onclick = function () {
+  imageModal.style.display = "none";
+};
