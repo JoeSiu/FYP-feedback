@@ -9,6 +9,9 @@ var createCardAction;
 
 var isHideDevFeedback = false;
 
+// Document element refs
+var imageModal = document.getElementById("image-modal");
+
 function init() {
   queryData();
 }
@@ -89,6 +92,10 @@ function createCard() {
         .getDownloadURL()
         .then((url) => {
           image.src = url;
+          image.onclick = function () {
+            document.getElementById("image-modal").style.display = "flex";
+            document.getElementById("image-modal-content").src = this.src;
+          };
         })
         .catch(() => console.log(`No image available for feedback #${cardIndex} (${element.id})`));
 
@@ -98,7 +105,7 @@ function createCard() {
 
       console.log(`loaded feedback #${cardIndex} (ID: ${element.id}, User: ${element.userID})`);
     }
-    
+
     if (isHideDevFeedback) {
       if (element.userID != "dev") {
         create();
@@ -194,3 +201,7 @@ document.getElementById("hide-dev-feedback-switch").addEventListener("change", (
     refresh();
   }
 });
+
+document.getElementById("image-modal-close").onclick = function () {
+  imageModal.style.display = "none";
+};
